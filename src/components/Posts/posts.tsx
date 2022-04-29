@@ -1,14 +1,20 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { ICombinedState } from '../../reducers';
+
 import Post from './Post/post';
 
 const Posts = () => {
-    return (
-        <>
-            <h1>POSTS</h1>
-            <Post />
-            <Post />
-        </>
-    );
+  const posts = useSelector((state: ICombinedState) => state.posts);
+  console.log(posts);
+
+  return (
+    <>
+      <h1>POSTS</h1>
+      <Post />
+      <Post />
+    </>
+  );
 };
 
 export default Posts;

@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useDispatch } from 'react-redux';
 
 import { Container, AppBar, Typography, Grow, Grid } from '@mui/material';
 import styled from '@emotion/styled';
+
+import { getPosts } from './actions/posts';
+import IDispatch from './interfaces/dispatch';
 
 import memories from './images/memories.png';
 import Form from './components/Form/form';
@@ -25,6 +30,12 @@ const StyledImg = styled.img`
 `;
 
 const App = () => {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    (dispatch as IDispatch)(getPosts());
+  }, [dispatch]);
+
   return (
     <Container maxWidth='lg'>
       <StyledAppBar position='static' color='inherit'>
