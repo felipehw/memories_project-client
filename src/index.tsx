@@ -11,15 +11,29 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import App from './App';
 import reducers from './reducers';
 
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
+const customTheme = createTheme({
+  /*palette: {
+    primary: {
+      main: '#f00',
+      contrastText: 'blue',
+    },
+  },
+  */
+});
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ThemeProvider theme={customTheme}>
+        <App />
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
