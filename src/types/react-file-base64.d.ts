@@ -7,7 +7,7 @@ declare namespace FileBase64Types {
         type: string,
         size: string,
         base64: string,
-        file: any,
+        file: File,
     }
     export type FileBase64Props = {
         multiple: boolean,
