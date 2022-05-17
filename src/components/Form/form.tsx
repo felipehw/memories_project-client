@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import FileBase64 from 'react-file-base64';
+import { useDispatch } from 'react-redux';
 
 import { TextField, Button, Typography, Paper } from '@mui/material';
 import styled from '@emotion/styled';
 
 import IDraftPost from '../../interfaces/draftPost';
+import IDispatch from '../../interfaces/dispatch';
+import { createPost } from '../../actions/posts';
 
 const StyledPaper = styled(Paper)`
   padding: ${(props) => props.theme.spacing(2)};
@@ -26,23 +29,27 @@ const StyledSubmitButton = styled(Button)`
 `;
 
 const Form = () => {
-    const postDraft: IDraftPost = { title: '', message: '', creator: '', tags: [], selectedFile: ''};
-    const [postData, setPostData] = useState(postDraft);
-    const tagsJoinedString = postData.tags.join(', ');
+    const blankPostDraft: IDraftPost = { title: '', message: '', creator: '', tags: [], selectedFile: ''};
+    const [postDraft, setPostDraft] = useState(blankPostDraft);
+    const tagsJoinedString = postDraft.tags.join(', ');
 
-    const handleSubmit = () => {
-      // TODO
+    const dispatch = useDispatch();
+
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+      event.preventDefault();
+      (dispatch as IDispatch)(createPost(postDraft));
     };
     const clear = () => {
       // TODO
+      // How we can invoke this after a successful `handleSubmit`?
     };
     const onChangeTagsTextField : React.ChangeEventHandler<HTMLInputElement> = (e) => {
       const inputText = e.target.value;
       const tags: string[] = inputText.split(/,\s*/);
-      setPostData({...postData, tags: tags});
+      setPostDraft({...postDraft, tags: tags});
     };
     const onDoneFileBase64 = (file: FileBase64Types.FileInfo | FileBase64Types.FileInfo[]) => {
-      setPostData({ ...postData, selectedFile: (file as FileBase64Types.FileInfo).base64 });
+      setPostDraft({ ...postDraft, selectedFile: (file as FileBase64Types.FileInfo).base64 });
     };
     return (
         <StyledPaper>
@@ -51,17 +58,17 @@ const Form = () => {
             <TextField
               name='creator' label='Creator'
               variant='outlined' fullWidth
-              value={postData.creator} onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
+              value={postDraft.creator} onChange={(e) => setPostDraft({ ...postDraft, creator: e.target.value })}
             />
             <TextField
               name='title' label='Title'
               variant='outlined' fullWidth
-              value={postData.title} onChange={(e) => setPostData({ ...postData, title: e.target.value })}
+              value={postDraft.title} onChange={(e) => setPostDraft({ ...postDraft, title: e.target.value })}
             />
             <TextField
               name='message' label='Message'
               variant='outlined' fullWidth
-              value={postData.message} onChange={(e) => setPostData({ ...postData, message: e.target.value })}
+              value={postDraft.message} onChange={(e) => setPostDraft({ ...postDraft, message: e.target.value })}
             />
             <TextField
               name='tags' label='Tags'

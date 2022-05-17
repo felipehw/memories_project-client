@@ -1,17 +1,20 @@
 import { Action } from 'redux';
 
-import { IActionPostsFetchAll } from "../actions/posts";
+import { IActionPostsFetchAll, IActionPostsCreate } from "../actions/posts";
 import IPost from "../interfaces/post";
 
-const posts = (state: IPost[] = [], action: Action) => {
+type IPostsState = IPost[];
+const posts = (state: IPostsState = [], action: Action): IPostsState => {
     switch (action.type) {
         case 'FETCH_ALL':
             return (action as IActionPostsFetchAll).payload;
         case 'CREATE':
-            return state;
+            // Dev opts for not get all posts again from server.
+            // We assemble the new state in the client adding the new post to the older ones.
+            return [...state, (action as IActionPostsCreate).payload];
         default:
             return state;
     }
 };
 
-export default posts;
+export { posts as default, type IPostsState };

@@ -1,9 +1,8 @@
 import { CombinedState, combineReducers } from "redux";
 
-import IPost from "../interfaces/post";
-import posts from "./posts";
+import posts, { IPostsState } from "./posts";
 
-type ICombinedState = CombinedState<{ posts: IPost[]}>;
+type ICombinedState = CombinedState<{ posts: IPostsState}>;
 const reducers = combineReducers<ICombinedState>({ posts });
 
 export { reducers as default, type ICombinedState };
