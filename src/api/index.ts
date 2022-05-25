@@ -9,5 +9,6 @@ const updatePost = (id: string, updatedPost: Partial<IDraftPost>) => {
     const config = { headers: { 'Content-Type': 'application/merge-patch+json' }};
     return axios.patch(`${URL}/${id}`, updatedPost, config);
 };
+const deletePost = (id: string) => axios.delete(`${URL}/${id}`);
 
-export { fetchPosts, createPost, updatePost };
+export { fetchPosts, createPost, updatePost, deletePost };

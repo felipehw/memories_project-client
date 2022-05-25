@@ -21,8 +21,12 @@ interface IActionPostsUpdate extends Action {
     type: 'UPDATE',
     payload: IPost,
 }
+interface IActionPostsDelete extends Action {
+    type: 'DELETE',
+    payload: Pick<IPost, '_id'>,
+}
 
-type IValidAction = IActionPostsFetchAll | IActionPostsCreate | IActionPostsUpdate;
+type IValidAction = IActionPostsFetchAll | IActionPostsCreate | IActionPostsUpdate | IActionPostsDelete;
 type IValidThunkAction<ValidAction extends IValidAction> = ThunkAction<Promise<void>, ICombinedState, void, ValidAction>;
 
 // Action Creators
@@ -51,8 +55,16 @@ const updatePost = (id: string, updatedPost: Partial<IDraftPost>): IValidThunkAc
         console.log(error);
     }
 };
+const deletePost = (id: string): IValidThunkAction<IActionPostsDelete> => async (dispatch, getState) => {
+    try {
+        await api.deletePost(id);
+        dispatch({ type: 'DELETE', payload: { _id: id } });
+    } catch (error: any) {
+        console.log(error);
+    }
+};
 
 export {
-    getPosts, createPost, updatePost,
-    type IActionPostsFetchAll , type IActionPostsCreate, type IActionPostsUpdate, type IValidAction
+    getPosts, createPost, updatePost, deletePost,
+    type IActionPostsFetchAll , type IActionPostsCreate, type IActionPostsUpdate, type IActionPostsDelete, type IValidAction
 };

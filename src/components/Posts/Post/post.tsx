@@ -1,12 +1,15 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import { Card, CardActions, CardContent, CardMedia, Button, Typography } from '@mui/material';
 import { ThumbUpAlt, Delete, MoreHoriz } from '@mui/icons-material';
 import styled from '@emotion/styled';
 
-import IPost from '../../../interfaces/post';
 import memories from '../../../images/memories.png';
+import IPost from '../../../interfaces/post';
+import IDispatch from '../../../interfaces/dispatch';
+import { deletePost } from '../../../actions/posts';
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -55,6 +58,8 @@ type PostProps = {
   setCurrentId: React.Dispatch<React.SetStateAction<string | null>>,
 };
 const Post = ({ post, setCurrentId }: PostProps) => {
+    const dispatch = useDispatch() as IDispatch;
+
     const tagsString = post.tags.map((tag, index, tags) => {
       return (index < tags.length - 1) ? `#${tag}, ` : `#${tag}`;
     });
@@ -82,7 +87,7 @@ const Post = ({ post, setCurrentId }: PostProps) => {
             <Button size='small' color='primary' onClick={() => {}}>
               <ThumbUpAlt fontSize='small' /> Like {post.likeCount}
             </Button>
-            <Button size='small' color='primary' onClick={() => {}}>
+            <Button size='small' color='primary' onClick={() => dispatch(deletePost(post._id))}>
               <Delete fontSize='small' /> Delete
             </Button>
           </StyledCardActions>
