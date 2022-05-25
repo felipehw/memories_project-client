@@ -42,7 +42,7 @@ const StyledDetailsDiv = styled.div`
 const StyledButton = styled(Button)`
   color: white;
 `;
-const StyledTypography = styled(Typography)`
+const StyledTitleTypography = styled(Typography)`
   padding: 0 16px;
 `;
 const StyledCardActions = styled(CardActions)`
@@ -52,8 +52,9 @@ const StyledCardActions = styled(CardActions)`
 `;
 type PostProps = {
   post: IPost,
+  setCurrentId: React.Dispatch<React.SetStateAction<string | null>>,
 };
-const Post = ({ post }: PostProps) => {
+const Post = ({ post, setCurrentId }: PostProps) => {
     const tagsString = post.tags.map((tag, index, tags) => {
       return (index < tags.length - 1) ? `#${tag}, ` : `#${tag}`;
     });
@@ -66,15 +67,16 @@ const Post = ({ post }: PostProps) => {
             <Typography variant='body2'>{moment(post.createdAt).fromNow()}</Typography>
           </StyledOverlayedLeftDiv>
           <StyledOverlayedRightDiv>
-            <StyledButton size='small' onClick={() => {}}>
+            <StyledButton size='small' onClick={() => setCurrentId(post._id)}>
               <MoreHoriz />
             </StyledButton>
           </StyledOverlayedRightDiv>
           <StyledDetailsDiv>
             <Typography variant='body2' color='textSecondary'>{tagsString}</Typography>
           </StyledDetailsDiv>
+          <StyledTitleTypography variant='h5' gutterBottom >{post.title}</StyledTitleTypography>
           <CardContent>
-            <StyledTypography variant='h5' gutterBottom >{post.message}</StyledTypography>
+            <Typography variant='h5' gutterBottom >{post.message}</Typography>
           </CardContent>
           <StyledCardActions>
             <Button size='small' color='primary' onClick={() => {}}>

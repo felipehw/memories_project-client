@@ -1,4 +1,4 @@
-import { Action, ActionCreator } from 'redux';
+import { Action } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import * as api from '../api';
@@ -6,6 +6,8 @@ import * as api from '../api';
 import IPost from '../interfaces/post';
 import IDraftPost from "../interfaces/draftPost";
 import { ICombinedState } from '../reducers';
+
+// Action Types
 
 interface IActionPostsFetchAll extends Action {
     type: 'FETCH_ALL',
@@ -15,30 +17,42 @@ interface IActionPostsCreate extends Action {
     type: 'CREATE',
     payload: IPost,
 }
+interface IActionPostsUpdate extends Action {
+    type: 'UPDATE',
+    payload: IPost,
+}
 
-type IValidAction = IActionPostsFetchAll | IActionPostsCreate | { type: 'DUMMY' };
-type IValidThunkAction = ThunkAction<Promise<void>, ICombinedState, void, IValidAction>;
+type IValidAction = IActionPostsFetchAll | IActionPostsCreate | IActionPostsUpdate;
+type IValidThunkAction<ValidAction extends IValidAction> = ThunkAction<Promise<void>, ICombinedState, void, ValidAction>;
 
-const getPosts: ActionCreator<IValidThunkAction> = () => async (dispatch, getState) => {
-    // I could use `ThunkAction<Promise<void>, ICombinedState, void, IActionPostsFetchAll>` instead `ValidThunkAction` for more strict definition about the valid action.
+// Action Creators
+
+const getPosts = (): IValidThunkAction<IActionPostsFetchAll> => async (dispatch, getState) => { // TODO
     try {
         const response = await api.fetchPosts();
-        const data = response.data as IPost[];
-        const action: IActionPostsFetchAll = { type: 'FETCH_ALL', payload: data };
-        dispatch(action);
+        dispatch({ type: 'FETCH_ALL', payload: (response.data as IPost[]) });
     } catch (error: any) {
-        console.log(error.message || error);
+        console.log(error);
     }
 };
-const createPost: ActionCreator<IValidThunkAction> = (draftPost: IDraftPost) => async (dispatch, getState) => {
+const createPost = (draftPost: IDraftPost): IValidThunkAction<IActionPostsCreate> => async (dispatch, getState) => { // TODO
     try {
         const response = await api.createPost(draftPost);
-        const data = response.data as IPost;
-        const action: IActionPostsCreate = { type: 'CREATE', payload: data };
-        dispatch(action);
+        dispatch({ type: 'CREATE', payload: (response.data as IPost) });
     } catch (error: any) {
-        console.log(error.message || error);
+        console.log(error);
+    }
+};
+const updatePost = (id: string, updatedPost: Partial<IDraftPost>): IValidThunkAction<IActionPostsUpdate> => async (dispatch, getState) => {
+    try {
+        const response = await api.updatePost(id, updatedPost);
+        dispatch({ type: 'UPDATE', payload: (response.data as IPost) });
+    } catch (error: any) {
+        console.log(error);
     }
 };
 
-export { getPosts, createPost, type IActionPostsFetchAll , type IActionPostsCreate, type IValidAction };
+export {
+    getPosts, createPost, updatePost,
+    type IActionPostsFetchAll , type IActionPostsCreate, type IActionPostsUpdate, type IValidAction
+};

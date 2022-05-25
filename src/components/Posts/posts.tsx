@@ -12,7 +12,10 @@ const StyledGrid = styled(Grid)`
   align-items: center;
 `;
 
-const Posts = () => {
+type PostsProps = {
+  setCurrentId: React.Dispatch<React.SetStateAction<string | null>>,
+};
+const Posts = ({ setCurrentId }: PostsProps) => {
   const posts = useSelector((state: ICombinedState) => state.posts);
   console.log(posts);
 
@@ -21,7 +24,7 @@ const Posts = () => {
       <StyledGrid container alignItems="stretch" spacing={3}>
         {posts.map((post) => (
           <Grid key={post._id} item xs={12} sm={6}>
-            <Post post={post} />
+            <Post post={post} setCurrentId={setCurrentId} />
           </Grid>
         ))}
       </StyledGrid>
