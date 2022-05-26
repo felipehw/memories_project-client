@@ -20,6 +20,11 @@ const StyledAppBar = styled(AppBar)`
   justify-content: center;
   align-items: center;
 `;
+const StyledGrid = styled(Grid)`
+  ${(props) => props.theme.breakpoints.down('sm')} {
+    flex-direction: column-reverse;
+  }
+`;
 const StyledTypography = styled(Typography)`
   color: rgba(0,183,255,1);
 `;
@@ -45,14 +50,14 @@ const App = () => {
       </StyledAppBar>
       <Grow in>
         <Container>
-          <Grid container justifyContent='space-between' alignItems='stretch' spacing={3}>
+          <StyledGrid container justifyContent='space-between' alignItems='stretch' spacing={3}>
             <Grid item xs={12} sm={7}>
               <Posts setCurrentId={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
               <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
-          </Grid>
+          </StyledGrid>
         </Container>
       </Grow>
     </Container>
