@@ -9,20 +9,22 @@ import { ICombinedState } from '../reducers';
 
 // Action Types
 
+enum ActionPostsType { FETCH_ALL, CREATE, UPDATE, DELETE };
+
 interface IActionPostsFetchAll extends Action {
-    type: 'FETCH_ALL',
+    type: ActionPostsType.FETCH_ALL,
     payload: IPost[],
 }
 interface IActionPostsCreate extends Action {
-    type: 'CREATE',
+    type: ActionPostsType.CREATE,
     payload: IPost,
 }
 interface IActionPostsUpdate extends Action {
-    type: 'UPDATE',
+    type: ActionPostsType.UPDATE,
     payload: IPost,
 }
 interface IActionPostsDelete extends Action {
-    type: 'DELETE',
+    type: ActionPostsType.DELETE,
     payload: Pick<IPost, '_id'>,
 }
 
@@ -34,7 +36,7 @@ type IValidThunkAction<ValidAction extends IValidAction> = ThunkAction<Promise<v
 const getPosts = (): IValidThunkAction<IActionPostsFetchAll> => async (dispatch, getState) => { // TODO
     try {
         const response = await api.fetchPosts();
-        dispatch({ type: 'FETCH_ALL', payload: (response.data as IPost[]) });
+        dispatch({ type: ActionPostsType.FETCH_ALL, payload: (response.data as IPost[]) });
     } catch (error: any) {
         console.log(error);
     }
@@ -42,7 +44,7 @@ const getPosts = (): IValidThunkAction<IActionPostsFetchAll> => async (dispatch,
 const createPost = (draftPost: IDraftPost): IValidThunkAction<IActionPostsCreate> => async (dispatch, getState) => { // TODO
     try {
         const response = await api.createPost(draftPost);
-        dispatch({ type: 'CREATE', payload: (response.data as IPost) });
+        dispatch({ type: ActionPostsType.CREATE, payload: (response.data as IPost) });
     } catch (error: any) {
         console.log(error);
     }
@@ -50,7 +52,7 @@ const createPost = (draftPost: IDraftPost): IValidThunkAction<IActionPostsCreate
 const updatePost = (id: string, updatedPost: Partial<IDraftPost>): IValidThunkAction<IActionPostsUpdate> => async (dispatch, getState) => {
     try {
         const response = await api.updatePost(id, updatedPost);
-        dispatch({ type: 'UPDATE', payload: (response.data as IPost) });
+        dispatch({ type: ActionPostsType.UPDATE, payload: (response.data as IPost) });
     } catch (error: any) {
         console.log(error);
     }
@@ -58,7 +60,7 @@ const updatePost = (id: string, updatedPost: Partial<IDraftPost>): IValidThunkAc
 const deletePost = (id: string): IValidThunkAction<IActionPostsDelete> => async (dispatch, getState) => {
     try {
         await api.deletePost(id);
-        dispatch({ type: 'DELETE', payload: { _id: id } });
+        dispatch({ type: ActionPostsType.DELETE, payload: { _id: id } });
     } catch (error: any) {
         console.log(error);
     }
@@ -66,7 +68,7 @@ const deletePost = (id: string): IValidThunkAction<IActionPostsDelete> => async 
 const likePost = (id: string): IValidThunkAction<IActionPostsUpdate> => async (dispatch, getState) => {
     try {
         const response = await api.likePost(id);
-        dispatch({ type: 'UPDATE', payload: (response.data as IPost) });
+        dispatch({ type: ActionPostsType.UPDATE, payload: (response.data as IPost) });
     } catch (error: any) {
         console.log(error);
     }
@@ -74,5 +76,6 @@ const likePost = (id: string): IValidThunkAction<IActionPostsUpdate> => async (d
 
 export {
     getPosts, createPost, updatePost, deletePost, likePost,
+    ActionPostsType,
     type IActionPostsFetchAll , type IActionPostsCreate, type IActionPostsUpdate, type IActionPostsDelete, type IValidAction
 };
