@@ -63,8 +63,16 @@ const deletePost = (id: string): IValidThunkAction<IActionPostsDelete> => async 
         console.log(error);
     }
 };
+const likePost = (id: string): IValidThunkAction<IActionPostsUpdate> => async (dispatch, getState) => {
+    try {
+        const response = await api.likePost(id);
+        dispatch({ type: 'UPDATE', payload: (response.data as IPost) });
+    } catch (error: any) {
+        console.log(error);
+    }
+};
 
 export {
-    getPosts, createPost, updatePost, deletePost,
+    getPosts, createPost, updatePost, deletePost, likePost,
     type IActionPostsFetchAll , type IActionPostsCreate, type IActionPostsUpdate, type IActionPostsDelete, type IValidAction
 };

@@ -9,7 +9,7 @@ import styled from '@emotion/styled';
 import memories from '../../../images/memories.png';
 import IPost from '../../../interfaces/post';
 import IDispatch from '../../../interfaces/dispatch';
-import { deletePost } from '../../../actions/posts';
+import { deletePost, likePost } from '../../../actions/posts';
 
 const StyledCard = styled(Card)`
   display: flex;
@@ -84,7 +84,7 @@ const Post = ({ post, setCurrentId }: PostProps) => {
             <Typography variant='h5' gutterBottom >{post.message}</Typography>
           </CardContent>
           <StyledCardActions>
-            <Button size='small' color='primary' onClick={() => {}}>
+            <Button size='small' color='primary' onClick={() => dispatch(likePost(post._id))}>
               <ThumbUpAlt fontSize='small' /> Like {post.likeCount}
             </Button>
             <Button size='small' color='primary' onClick={() => dispatch(deletePost(post._id))}>

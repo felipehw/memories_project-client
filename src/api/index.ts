@@ -10,5 +10,6 @@ const updatePost = (id: string, updatedPost: Partial<IDraftPost>) => {
     return axios.patch(`${URL}/${id}`, updatedPost, config);
 };
 const deletePost = (id: string) => axios.delete(`${URL}/${id}`);
+const likePost = (id: string) => axios.patch(`${URL}/${id}/likePost`);
 
-export { fetchPosts, createPost, updatePost, deletePost };
+export { fetchPosts, createPost, updatePost, deletePost, likePost };
