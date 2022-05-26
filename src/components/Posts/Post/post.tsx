@@ -81,14 +81,14 @@ const Post = ({ post, setCurrentId }: PostProps) => {
           </StyledDetailsDiv>
           <StyledTitleTypography variant='h5' gutterBottom >{post.title}</StyledTitleTypography>
           <CardContent>
-            <Typography variant='h5' gutterBottom >{post.message}</Typography>
+            <Typography variant='body2' color='textSecondary'>{post.message}</Typography>
           </CardContent>
           <StyledCardActions>
             <Button size='small' color='primary' onClick={() => dispatch(likePost(post._id))}>
-              <ThumbUpAlt fontSize='small' /> Like {post.likeCount}
+              <ThumbUpAlt fontSize='small' /> &nbsp; Like {post.likeCount}
             </Button>
             <Button size='small' color='primary' onClick={() => dispatch(deletePost(post._id))}>
-              <Delete fontSize='small' /> Delete
+              <Delete fontSize='small' /> &nbsp; Delete
             </Button>
           </StyledCardActions>
         </StyledCard>
